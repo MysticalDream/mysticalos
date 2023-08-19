@@ -1,0 +1,22 @@
+# tools
+PLATFORM=Linux
+NASM=nasm
+
+IMAGENAME=mysticalos2.img
+boot=src/boottest
+
+all: img
+
+img: $(IMAGENAME)
+	@echo "build img completed"
+
+$(IMAGENAME):boot1.bin loader1.bin
+	dd if=boot1.bin of=$(IMAGENAME) bs=512 count=1  conv=notrunc
+	dd if=loader1.bin of=$(IMAGENAME) bs=512 count=1 seek=1 conv=notrunc
+
+%1.bin: $(boot)/%.asm
+	$(NASM) -f bin -o $*1.bin $(boot)/$*.asm
+
+
+platform:
+	@echo $(PLATFORM)
